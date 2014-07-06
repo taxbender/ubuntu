@@ -1,6 +1,9 @@
 #Script downloads and installs MakeMKV in Ubuntu. 
 #Original script provided by mechevar @ http://www.makemkv.com/forum2/viewtopic.php?f=3&t=5266
 
+#To make script executable run this at the command prompt -- chmod a+x InstallMakeMkv.sh
+#Then run ./InstallMakeMkv.sh
+
 
 #!/bin/sh
 
