@@ -4,6 +4,11 @@
 # Script assumes a base install only (no SSH, etc) are installed when the
 #   system is set up.
 
+# Script Variables (Default values)
+
+default=Y                 #Default reply value; Leave Y
+git_user=taxbender        #Github username
+git_email=email           #Github user email
 
 
 
@@ -20,6 +25,13 @@ sudo apt-get -y --force-yes upgrade
 
 sudo apt-get -y install \
   openssh-server
+  git-core
+  
+# Configure git
+git config --global user.name "$git_user"
+git config --global user.email "$git_email"
+
+
   
 clear
 echo "Default applications installed"
@@ -27,11 +39,18 @@ echo ""
 echo ""
   
 # Option to install virtual desktop
-read -p "Do you want to install vnc virtual deskptop? [Y/n]" response
+read -p "Do you want to install vnc virtual deskptop? [$default / n] " reply
 
-if [ $response = y|Y ]
+reply=${reply: -$default}
+
+
+if [ $reply = y|Y ]
   then
-    
+    sudo apt-get install \
+      gnome-core \
+      gnome-session-fallback \
+      vnc4server
+      
     
     
   else
