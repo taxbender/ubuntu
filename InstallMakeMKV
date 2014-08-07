@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #Script downloads and installs MakeMKV in Ubuntu. 
 #Original script provided by mechevar @ http://www.makemkv.com/forum2/viewtopic.php?f=3&t=5266
 
