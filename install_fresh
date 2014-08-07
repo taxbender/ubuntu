@@ -1,0 +1,41 @@
+#!/bin/bash
+#
+# This script configures a fresh install of Ubuntu Server to my liking. 
+# Script assumes a base install only (no SSH, etc) are installed when the
+#   system is set up.
+
+
+
+
+# Add repos
+
+
+
+# Update Repos / Upgrade System
+
+sudo apt-get -y --force-yes update
+sudo apt-get -y --force-yes upgrade
+
+# Install applications
+
+sudo apt-get -y install \
+  openssh-server
+  
+clear
+echo "Default applications installed"
+echo ""
+echo ""
+  
+# Option to install virtual desktop
+read -p "Do you want to install vnc virtual deskptop? [Y/n]" response
+
+if [ $response = y|Y ]
+  then
+    
+    
+    
+  else
+    echo ""
+    echo "Virtual desktop not installed."
+    echo ""
+fi
