@@ -64,7 +64,7 @@ if [ $bond = Y ]
       line 7,   slave
       line 8,   bond-miimon 100
       line 9,   bond-updelay 200
-      line 9,   bond-downdelay 200
+      line 10,   bond-downdelay 200
 EOF
     
     # Add the slave interfaces to line 7 of the interface file
