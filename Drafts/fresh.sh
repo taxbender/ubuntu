@@ -11,12 +11,15 @@
   
   # Install options
   bond = "y"       	          # Bond interfaces?
-  mail = "y"                      # Install / configure SMTP mail
-  deluge = "y"                    # Install / configure deluged and deluge-web; includes deluge user/group config
-  transmission = "y"              # Install / configure Transmission; includes transmission user/group config
-  flexget = "y"                   # Install / configure FlexGet;
-  owncloud = "y"                  # Install / configure OwnCloud
-  git = "y"                       # Install / configure Git; configs for flexget/transmission live here
+  git = "y"                       # Install / config Git; configs for flexget/transmission live here
+  mail = "y"                      # Install / config SMTP mail
+  deluge = "y"                    # Install / config deluged and deluge-web; includes deluge user/group config
+  transmission = "y"              # Install / config Transmission; includes transmission user/group config
+  flexget = "y"                   # Install / config FlexGet;
+  owncloud = "y"                  # Install / config OwnCloud
+  vnc = "n"                       # Install / config VNC desktop
+  mounnts = "n"			  # Create mount points
+
   
   # Bonded interface variables
   Interfaces=( "eth0" "eth1" )	  # Bond interfaces / network adapters
@@ -28,7 +31,14 @@
 
   #SMTP mail variables
   
+  # Git variables
+  git_user = "username"		  # Git username
+  git_email = "email"             # Git email address for username
   
+  # VNC variables
+  	# None yet
+  	
+  	
 # Update Repositories / Upgrade System
 sudo apt-get -y --force-yes update
 sudo apt-get -y --force-yes upgrade  
@@ -82,6 +92,54 @@ EOF
 	# Do nothing
 
  fi
+
+
+# Git install / config
+if [ #git = y ]
+  then 
+    # Install git-core
+    sudo apt-get -y install git-core
+    
+    # Configure git
+    git config --global user.name "$git_user"
+    git config --global user.email "$git_email"
+    
+    # Create new ssh key for Git, using the provided email as a label
+    ssh-keygen -t rsa -C "Git_sshKey"
+  
+  else
+    # Do nothing
+fi
+
+
+# VNC desktop install / config
+
+if [ $vnc = y ]
+  then
+    sudo apt-get install \
+      gnome-core \
+      gnome-session-fallback \
+      vnc4server
+    
+    cat > /home/$USER/.vnc/xstartup <<EOL
+    line 1, #!/bin/sh
+    line 2, 
+    line 3, # Uncomment the following two lines for normal desktop:
+    line 4, unset SESSION_MANAGER
+    line 5, #exec /etc/X11/xinit/xinitrc
+    line 6, gnome-session --session=gnome-classic &
+    line 7, 
+    line 8, [ -x /etc/vnc/xstartup ] && exec /etc/vnc/xstartup
+    line 9, [ -r $HOME/.Xresources ] && xrdb $HOME/.Xresources
+    line 10, xsetroot -solid grey
+    line 11, vncconfig -iconic &
+    line 12, #x-terminal-emulator -geometry 1280x1024+10+10 -ls -title "$VNCDESKTOP Desktop" &
+    line 13, #x-window-manager &
+EOL
+    
+  else
+    # Do nothing
+fi
 	
   
 **************************************************************************************
@@ -116,80 +174,3 @@ install owncloud
 
 
 
-
-
-sudo apt-get -y install git-core
-  
-# Configure git
-git config --global user.name "$git_user"
-git config --global user.email "$git_email"
-
-
-# Create new ssh key for Git, using the provided email as a label
-ssh-keygen -t rsa -C "Git_sshKey"
-
-echo 
-
-clear
-echo "Default applications installed"
-echo ""
-echo ""
-  
-# Option to install virtual desktop
-read -p "Do you want to install vnc virtual deskptop? [$default / n] " reply
-
-reply=${reply: -$default}
-
-if [ $reply = y|Y ]
-  then
-    sudo apt-get install \
-      gnome-core \
-      gnome-session-fallback \
-      vnc4server
-    
-    cat > /home/$USER/.vnc/xstartup <<EOL
-    line 1, #!/bin/sh
-    line 2, 
-    line 3, # Uncomment the following two lines for normal desktop:
-    line 4, unset SESSION_MANAGER
-    line 5, #exec /etc/X11/xinit/xinitrc
-    line 6, gnome-session --session=gnome-classic &
-    line 7, 
-    line 8, [ -x /etc/vnc/xstartup ] && exec /etc/vnc/xstartup
-    line 9, [ -r $HOME/.Xresources ] && xrdb $HOME/.Xresources
-    line 10, xsetroot -solid grey
-    line 11, vncconfig -iconic &
-    line 12, #x-terminal-emulator -geometry 1280x1024+10+10 -ls -title "$VNCDESKTOP Desktop" &
-    line 13, #x-window-manager &
-    EOL
-    
-    
-  else
-    echo ""
-    echo "Virtual desktop not installed."
-    echo ""
-fi
-
-
-   cat > /home/$USER/.vnc/xstartup <<EOL
-    line 1, #!/bin/sh
-    line 2, 
-    line 3, # Uncomment the following two lines for normal desktop:
-    line 4, unset SESSION_MANAGER
-    line 5, #exec /etc/X11/xinit/xinitrc
-    line 6, gnome-session --session=gnome-classic &
-    line 7, 
-    line 8, [ -x /etc/vnc/xstartup ] && exec /etc/vnc/xstartup
-    line 9, [ -r $HOME/.Xresources ] && xrdb $HOME/.Xresources
-    line 10, xsetroot -solid grey
-    line 11, vncconfig -iconic &
-    line 12, #x-terminal-emulator -geometry 1280x1024+10+10 -ls -title "$VNCDESKTOP Desktop" &
-    line 13, #x-window-manager &
-EOL
-    
-    
-  else
-    echo ""
-    echo "Virtual desktop not installed."
-    echo ""
-fi
