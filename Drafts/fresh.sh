@@ -11,7 +11,7 @@
 # Script Variables (Default values)
   
   # Install options
-  bond = "y"                       # Bond interfaces?
+  bond = "y"                      # Bond interfaces?
   git = "y"                       # Install / config Git; configs for flexget/transmission live here
   mail = "y"                      # Install / config SMTP mail
   deluge = "y"                    # Install / config deluged and deluge-web; includes deluge user/group config
