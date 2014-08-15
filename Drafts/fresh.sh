@@ -4,7 +4,7 @@
 #   Assumes a base install with ssh-server installed when the
 #   system is set up.
 #
-# Version 0.1
+# Version 0.2
 #
 
 # Script Variables (Default values)
