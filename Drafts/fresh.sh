@@ -101,7 +101,7 @@ if [ $email = "y" ]
     # Backup original config file
     cp /etc/ssmtp/ssmtp.conf /etc/ssmtp/ssmtp.conf.original
     # Create new config file with email settings for gmail
-    cat > /etc/ssmtp/ssmtp.conf <<EOF
+    cat > /etc/ssmtp/ssmtp.conf <<"EOF"
       line 1, root=$email_address
       line 2, mailhub=smtp.gmail.com:587
       line 3, AuthUser=$email_address
@@ -113,8 +113,8 @@ if [ $email = "y" ]
       line 9, FromLineOverride=None
       line 10, AuthMethod=LOGIN
 EOF
-    # sSMTP email password is stored in a plain text file. I change ownership
-    #   and access permissions to the conf file
+    # sSMTP email password is stored in plain text. Change ownership
+    #   and access permissions to the conf file to protect is a bit.
     chown root:mail /etc/ssmtp/ssmtp.conf
     chmod 640 /etc/ssmtp/ssmtp.conf
     # Send a test email
@@ -153,7 +153,7 @@ if [ $vnc = y ]
       gnome-session-fallback \
       vnc4server
     # Configure the startp file for x server
-    cat > /home/$USER/.vnc/xstartup <<EOF
+    cat > /home/$USER/.vnc/xstartup <<"EOF"
       line 1, #!/bin/sh
       line 2, 
       line 3, # Uncomment the following two lines for normal desktop:
