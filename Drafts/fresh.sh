@@ -8,34 +8,35 @@
 # Version 0.2 (Still testing)
 #
 
-# Script Variables (Default values)
+# Script Variables (Default included)
   
   # Install options
-  bond = "y"                      # Bond interfaces?
-  git = "y"                       # Install / config Git; configs for flexget/transmission live here
-  mail = "y"                      # Install / config SMTP mail
-  deluge = "y"                    # Install / config deluged and deluge-web; includes deluge user/group config
-  transmission = "y"              # Install / config Transmission; includes transmission user/group config
-  flexget = "y"                   # Install / config FlexGet;
-  owncloud = "y"                  # Install / config OwnCloud
-  vnc = "n"                       # Install / config VNC desktop
-  mounnts "n"                     # Create mount points
-
+  net_bond = "y"                      # Bond interfaces?
+  email = "y"                         # Install / config sSMTP mail
+  git = "y"                           # Install / config Git; configs for flexget/transmission live here
+  deluge = "n"                        # Install / config deluged and deluge-web; includes deluge user/group config
+  transmission = "n"                  # Install / config Transmission; includes transmission user/group config
+  flexget = "y"                       # Install / config FlexGet;
+  mounnts "n"                         # Create mount points; Include nfs-client install
+  owncloud = "y"                      # Install / config OwnCloud
+  vnc = "n"                           # Install / config VNC desktop
+  
   # Bonded interface variables
-  Interfaces=( "eth0" "eth1" )	  # Bond interfaces / network adapters
-  BondName = "bond0"              # Bond interface name
-  BondIP = 192.168.10.2       	  # Bond interface IP
-  BondGateway = 192.168.10.10     # Bond interface gateway
-  BondNetmask = 255.255.255.0     # Bond interface netmask
-  BondMode = "balance-rr"         # Bond mode; balance-rr provides load balancing and fault tolerance
+  Interfaces=( "eth0" "eth1" )	      # Bond interfaces / network adapters
+  BondName = "bond0"                  # Bond interface name
+  BondIP = 192.168.10.2       	      # Bond interface IP
+  BondGateway = 192.168.10.10         # Bond interface gateway
+  BondNetmask = 255.255.255.0         # Bond interface netmask
+  BondMode = "balance-rr"             # Bond mode; balance-rr provides load balancing and fault tolerance
 
   #SMTP mail variables
-
-
+  email_address = "email@gmail.com"
+  email_password = "email password"
+  send_email = "email address you receive email at"
   
   # Git variables
-  git_user = "username"		        # Git username
-  git_email = "email"             # Git email address for username
+  git_user = "username"		            # Git username
+  git_email = "email"                 # Git email address for username
   
   # VNC variables
   	# None yet
@@ -47,14 +48,13 @@ sudo apt-get -y --force-yes upgrade
 
 
 ### Install / config scripts ###  
-  
-# Bonded interface 
 
-if [ $bond = Y ]
+  
+########## Network Bonding ######################
+if [ $net_bond = Y ]
   then
     # Install bonding enslave program
     sudo apt-get ifenslave
-    
     # Shut-down each interface listed in Interfaces array
     for i in "${Interfaces[@]}"
       do
@@ -64,7 +64,6 @@ if [ $bond = Y ]
 	
     # Copy original interfaces file
     sudo cp /etc/network/interface /etc/network/interface.original
-	
     # Create interface file for the bonded interface
     cat >	/etc/network/interface <<"EOF"
       line 1, auto $BondName
@@ -88,16 +87,46 @@ EOF
 	
     # Bring bonded interface up
     sudo ifup $BondName
- 
-    echo "Bonded network interface created"
+    echo "Bonded network interface created."
 	else
 	# Do nothing
+fi
 
- fi
+
+########## SMTP mail ############################
+if [ $email = "y" ] 
+  then
+    # Install ssmtp
+    sudo apt-get install ssmtp
+    # Backup original config file
+    cp /etc/ssmtp/ssmtp.conf /etc/ssmtp/ssmtp.conf.original
+    # Create new config file with email settings for gmail
+    cat > /etc/ssmtp/ssmtp.conf <<EOF
+      line 1, root=$email_address
+      line 2, mailhub=smtp.gmail.com:587
+      line 3, AuthUser=$email_address
+      line 4, AuthPass=$email_password
+      line 5, UseTLS=YES
+      line 6, UseSTARTTLS=YES
+      line 7, rewriteDomain=gmail.com
+      line 8, hostname=$email_address
+      line 9, FromLineOverride=None
+      line 10, AuthMethod=LOGIN
+EOF
+    # sSMTP email password is stored in a plain text file. I change ownership
+    #   and access permissions to the conf file
+    chown root:mail /etc/ssmtp/ssmtp.conf
+    chmod 640 /etc/ssmtp/ssmtp.conf
+    # Send a test email
+    echo "Sending a test email. Check your email to ensure config works."
+    ssmtp "Testing sSMTP Configuration" $send_email
+  else
+    # Do nothing
+fi
 
 
-# Git install / config
-if [ #git = y ]
+########## Git ##################################
+if [ $git = y ]
   then 
     # Install git-core
     sudo apt-get -y install git-core
@@ -118,26 +147,29 @@ fi
 
 if [ $vnc = y ]
   then
+    # Install components needed for VNC server. 
     sudo apt-get install \
       gnome-core \
       gnome-session-fallback \
       vnc4server
-    
-    cat > /home/$USER/.vnc/xstartup <<EOL
-    line 1, #!/bin/sh
-    line 2, 
-    line 3, # Uncomment the following two lines for normal desktop:
-    line 4, unset SESSION_MANAGER
-    line 5, #exec /etc/X11/xinit/xinitrc
-    line 6, gnome-session --session=gnome-classic &
-    line 7, 
-    line 8, [ -x /etc/vnc/xstartup ] && exec /etc/vnc/xstartup
-    line 9, [ -r $HOME/.Xresources ] && xrdb $HOME/.Xresources
-    line 10, xsetroot -solid grey
-    line 11, vncconfig -iconic &
-    line 12, #x-terminal-emulator -geometry 1280x1024+10+10 -ls -title "$VNCDESKTOP Desktop" &
-    line 13, #x-window-manager &
-EOL
+    # Configure the startp file for x server
+    cat > /home/$USER/.vnc/xstartup <<EOF
+      line 1, #!/bin/sh
+      line 2, 
+      line 3, # Uncomment the following two lines for normal desktop:
+      line 4, unset SESSION_MANAGER
+      line 5, #exec /etc/X11/xinit/xinitrc
+      line 6, gnome-session --session=gnome-classic &
+      line 7, 
+      line 8, [ -x /etc/vnc/xstartup ] && exec /etc/vnc/xstartup
+      line 9, [ -r $HOME/.Xresources ] && xrdb $HOME/.Xresources
+      line 10, xsetroot -solid grey
+      line 11, vncconfig -iconic &
+      line 12, #x-terminal-emulator -geometry 1280x1024+10+10 -ls -title "$VNCDESKTOP Desktop" &
+      line 13, #x-window-manager &
+EOF
+    # Configure the startup scripts so VNC does not start at boot
+    # Add alias to .bash_aliases for VNC start and stop
     
   else
     # Do nothing
