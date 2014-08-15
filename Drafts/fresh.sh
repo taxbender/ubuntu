@@ -19,15 +19,15 @@
   flexget = "y"                   # Install / config FlexGet;
   owncloud = "y"                  # Install / config OwnCloud
   vnc = "n"                       # Install / config VNC desktop
-  mounnts = "n"			              # Create mount points
+  mounnts "n"                     # Create mount points
 
   # Bonded interface variables
   Interfaces=( "eth0" "eth1" )	  # Bond interfaces / network adapters
   BondName = "bond0"              # Bond interface name
   BondIP = 192.168.10.2       	  # Bond interface IP
-  BondGateway = 192.168.10.10	    # Bond interface gateway
-  BondNetmask = 255.255.255.0	    # Bond interface netmask
-  BondMode = "balance-rr"	        # Bond mode; balance-rr provides load balancing and fault tolerance
+  BondGateway = 192.168.10.10     # Bond interface gateway
+  BondNetmask = 255.255.255.0     # Bond interface netmask
+  BondMode = "balance-rr"         # Bond mode; balance-rr provides load balancing and fault tolerance
 
   #SMTP mail variables
 
