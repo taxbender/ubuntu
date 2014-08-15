@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # This script configures a fresh install of Ubuntu Server to my liking. 
-#   Assumes a base install with SSH-server installed when the
+#   Assumes a base install with ssh-server installed when the
 #   system is set up.
 #
 # Version 0.1
