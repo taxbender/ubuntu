@@ -1,11 +1,13 @@
 #!/bin/bash
 #
-# This script configures a fresh install of Ubuntu Server to my liking. 
-#   Assumes a base install with ssh-server installed when the
-#   system is set up.
+# Script automate a fresh install of applications I use on my headless Ubuntu server. 
+#   I use putty to connect to my server and only add ssh-server during the initial 
+#   installation process. The scipt is then copied to the default user's home directory
+#   then run as default user. 
 #
-# Version 0.2
+# Version 0.2 (Still testing)
 #
+
 
 # Script Variables (Default values)
   
@@ -140,36 +142,6 @@ EOL
   else
     # Do nothing
 fi
-	
-  
-**************************************************************************************
-
-	
- 
-
-
-
-
-
-
-
-install mail
-config mail
-send test mail
-install deluged
-install deluge-web
-set up deluge user 
-set up deluge scripts
-
-
-install flexget
-set up basic flexget folder/groups/permission (run as deluge user)
-
-create fstab mount points
-
-
-install owncloud
-
 
 
 
