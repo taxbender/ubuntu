@@ -35,7 +35,7 @@
   send_email = "email address you receive email at"
   
   # Git variables
-  git_user = "username"		            # Git username
+  git_user = "username"               # Git username
   git_email = "email"                 # Git email address for username
   
   # VNC variables
