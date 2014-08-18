@@ -35,8 +35,10 @@
   #SMTP mail variables
   email_address="email@gmail.com"
   email_password="password"
-  send_email="send@gmail.com"
-  
+  email_to="send@gmail.com"
+  email_subject="Test"
+  email_body="This is a test email."
+
   # Git variables
   git_user="username"                 # Git username
   git_email="email"                   # Git email address for username
@@ -126,13 +128,8 @@ EOF
     exec su -l $USER
     
     # Send a test email
-    echo "Sending a test email. Check your email to ensure config works."
-    mail $send_email << EOF
-	To: $send_email
-	From: $email_address
-	Subject: Test Email
-	This is a test email
-EOF
+    echo "Sending a test email. Check your $email_to account to ensure you received a message."
+    mail -s $email_subject $email_to < $email_body
 
   else
     # Do nothing
