@@ -14,14 +14,14 @@
   debug_me="y"
 
   # Install options
-  net_bond="y"                        # Bond interfaces?
+  net_bond="n"                        # Bond interfaces?
   email="y"                           # Install / config sSMTP mail
-  git="y"                             # Install / config Git; configs for flexget/transmission live here
+  git="n"                             # Install / config Git; configs for flexget/transmission live here
   deluge="n"                          # Install / config deluged and deluge-web; includes deluge user/group config
   transmission="n"                    # Install / config Transmission; includes transmission user/group config
-  flexget="y"                         # Install / config FlexGet;
+  flexget="n"                         # Install / config FlexGet;
   mounnts="n"                         # Create mount points; Include nfs-client install
-  owncloud="y"                        # Install / config OwnCloud
+  owncloud="n"                        # Install / config OwnCloud
   vnc="n"                             # Install / config VNC desktop
   
   # Bonded interface variables
