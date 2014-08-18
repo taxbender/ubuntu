@@ -2,8 +2,8 @@
 #
 # Script automate a fresh install of applications I use on my headless Ubuntu server. 
 #   I use putty to connect to my server and only add ssh-server during the initial 
-#   installation process. The scipt is then copied to the default user's home directory
-#   then run as default user. 
+#   installation process. The scipt is then copied to the default user's home directory.
+#   
 # This script should be run as the root, e.g. sudo $user
 # Version 0.2 (Still testing)
 #
