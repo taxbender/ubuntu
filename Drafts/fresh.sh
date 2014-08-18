@@ -20,7 +20,7 @@
   deluge="n"                          # Install / config deluged and deluge-web; includes deluge user/group config
   transmission="n"                    # Install / config Transmission; includes transmission user/group config
   flexget="y"                         # Install / config FlexGet;
-  mounnts "n"                         # Create mount points; Include nfs-client install
+  mounnts="n"                         # Create mount points; Include nfs-client install
   owncloud="y"                        # Install / config OwnCloud
   vnc="n"                             # Install / config VNC desktop
   
@@ -68,7 +68,7 @@ if [ $net_bond = "y" ]
     # Copy original interfaces file
     sudo cp /etc/network/interface /etc/network/interface.original
     # Create interface file for the bonded interface
-    cat >	/etc/network/interface << EOF
+    cat > /etc/network/interface << EOF
 	auto $BondName
 	iface $BondName inet static
 	  address $BondIP
@@ -86,13 +86,12 @@ EOF
       do
         $ awk '{print $7"$i "}' /etc/network/interface
       done
-    # End of loop
 	
     # Bring bonded interface up
     sudo ifup $BondName
     echo "Bonded network interface created."
-	else
-	# Do nothing
+  else
+    # Do nothing
 fi
 
 
