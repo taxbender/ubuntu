@@ -102,37 +102,40 @@ if [ $email = "y" ]
   then
     # Install ssmtp
     sudo apt-get install ssmtp
+    
     # Backup original config file
-    cp /etc/ssmtp/ssmtp.conf /etc/ssmtp/ssmtp.conf.original
+    mv /etc/ssmtp/ssmtp.conf /etc/ssmtp/ssmtp.conf.original
+    
     # Create new config file with email settings for gmail
     cat > /etc/ssmtp/ssmtp.conf << EOF
-	root=$email_address
-	mailhub=smtp.gmail.com:587
-	AuthUser=$email_address
-	AuthPass=$email_password
-	UseTLS=YES
-	UseSTARTTLS=YES
-	rewriteDomain=gmail.com
-	hostname=$email_address
-	FromLineOverride=None
-	AuthMethod=LOGIN
+root=$email_address
+mailhub=smtp.gmail.com:587
+AuthUser=$email_address
+AuthPass=$email_password
+UseTLS=YES
+UseSTARTTLS=YES
+rewriteDomain=gmail.com
+hostname=$email_address
+FromLineOverride=None
+AuthMethod=LOGIN
 EOF
-    
+
     # sSMTP email password is stored in plain text. Change ownership
     #   and access permissions to the conf file to protect is a bit.
     chown root:mail /etc/ssmtp/ssmtp.conf
     chmod 640 /etc/ssmtp/ssmtp.conf
 
     # Add user to mail group & reload group assignments
-    usermod -a -G mail $USER
-    exec su -l $USER
+    adduser $SUOD_USER mail
     
-    # Send a test email
-    echo "Sending a test email. Check your $email_to account to ensure you received a message."
-    mail -s $email_subject $email_to < $email_body
-
-  else
-    # Do nothing
+    # Create an empty file for the test email
+    echo "This is a test email" >> /home/$SUDO_USER/testmsg.txt
+    chown $SUDO_USER $SUDO_USER /home/$SUDO_USER/testmsg.txt
+    
+    # User groups are updated on login. Script runs and then forces a 
+    #  reboot. Once logged in, user should send a test email to ensure
+    #  config work. Syntax for test email is:
+    #  ssmtp [email@gmail.com] < testmsg.txt
 fi
 
 
