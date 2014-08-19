@@ -71,16 +71,16 @@ if [ $net_bond = "y" ]
     sudo cp /etc/network/interface /etc/network/interface.original
     # Create interface file for the bonded interface
     cat > /etc/network/interface << EOF
-	auto $BondName
-	iface $BondName inet static
-	  address $BondIP
-	  gateway $BondGateway
-	  netmask $BondNetmask
-	  bond-mode $BondMode
-	  slave
-	  bond-miimon 100
-	  bond-updelay 200
-	  bond-downdelay 200
+auto $BondName
+iface $BondName inet static
+  address $BondIP
+  gateway $BondGateway
+  netmask $BondNetmask
+  bond-mode $BondMode
+  slave
+  bond-miimon 100
+  bond-updelay 200
+  bond-downdelay 200
 EOF
     
     # Add the slave interfaces to line 7 of the interface file
@@ -92,8 +92,6 @@ EOF
     # Bring bonded interface up
     sudo ifup $BondName
     echo "Bonded network interface created."
-  else
-    # Do nothing
 fi
 
 
@@ -128,9 +126,12 @@ EOF
     # Add user to mail group & reload group assignments
     adduser $SUOD_USER mail
     
-    # Create an empty file for the test email
+    # Create a file for the test email
     echo "This is a test email" >> /home/$SUDO_USER/testmsg.txt
-    chown $SUDO_USER $SUDO_USER /home/$SUDO_USER/testmsg.txt
+    
+    # Change ownership to sudo user / group. The second $SUDO_USER is hacky
+    #   but works. Assumes sudo_user's primary group is the same as his name
+    chown $SUDO_USER:$SUDO_USER /home/$SUDO_USER/testmsg.txt
     
     # User groups are updated on login. Script runs and then forces a 
     #  reboot. Once logged in, user should send a test email to ensure
