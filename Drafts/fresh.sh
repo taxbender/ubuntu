@@ -14,47 +14,42 @@
   debug_me="y"
 
   # Install options
-  net_bond="n"                        # Bond interfaces?
-  email="y"                           # Install / config sSMTP mail
-  git="n"                             # Install / config Git; configs for flexget/transmission live here
-  deluge="n"                          # Install / config deluged and deluge-web; includes deluge user/group config
-  transmission="n"                    # Install / config Transmission; includes transmission user/group config
-  flexget="n"                         # Install / config FlexGet;
-  mounnts="n"                         # Create mount points; Include nfs-client install
-  owncloud="n"                        # Install / config OwnCloud
-  vnc="n"                             # Install / config VNC desktop
+  net_bond="n"                         # Bond selected interfaces
+  nfs_mounts="n"                       # Create / Mount nfs shares
+  email="n"                            # Install / config sSMTP mail
+  sensors="n"                          # Install / config temp & drive sensors
+#  deluge="n"                          # Install / config deluged and deluge-web; includes deluge user/group config
+#  transmission="n"                    # Install / config Transmission; includes transmission user/group config
+#  flexget="n"                         # Install / config FlexGet;
+#  owncloud="n"                        # Install / config OwnCloud
+#  vnc="n"                             # Install / config VNC desktop
   
   # Bonded interface variables
-  Interfaces=( "eth0" "eth1" )	      # Bond interfaces / network adapters
+  Interfaces=( "eth0" "eth1" )	      # Bond interfaces / interfaces should be separated with a space
   BondName="bond0"                    # Bond interface name
   BondIP="192.168.10.2"       	      # Bond interface IP
-  BondGateway="192.168.10.10"         # Bond interface gateway
+  BondGateway="192.168.10.1"          # Bond interface gateway
   BondNetmask="255.255.255.0"         # Bond interface netmask
   BondMode="balance-rr"               # Bond mode; balance-rr provides load balancing and fault tolerance
+
+  # NFS Mounts
+  mount_ip="192.168.10.105"
+  mount_path="/mnt/user"
+  mounts=( "Ghost_Backup" "Media" )
+  mount_opts="soft,intr,rsize=8192,wsize=8192"
 
   #SMTP mail variables
   email_address="email@gmail.com"
   email_password="password"
-  email_to="send@gmail.com"
-  email_subject="Test"
-  email_body="This is a test email."
 
-  # Git variables
-  git_user="username"                 # Git username
-  git_email="email"                   # Git email address for username
-  
-  # VNC variables
-  	# None yet
-  	
-  	
-# Update Repositories / Upgrade System
+
+########## Install / config scripts ###  	
+
+########## Update Repositories / Upgrade System #
 apt-get -y --force-yes update
 apt-get -y --force-yes upgrade  
 
 
-### Install / config scripts ###  
-
-  
 ########## Network Bonding ######################
 if [ $net_bond = "y" ]
   then
@@ -95,7 +90,33 @@ EOF
 fi
 
 
-########## SMTP mail ############################
+########## NFS Client / Mounts ##################
+if [ nfs_mounts = "y" ]
+  then
+  
+    # Install nfs client app
+    apt-get -y install nfs-common
+
+    # Create mount points with the same name as NFS folders. 
+    for i in "${mounts[@]}"
+      do
+        # Create mount point
+        mkdir /home/$SUDO_USER/$i
+
+        # Change ownership to sudo_user (normal user)
+        chown $SUDO_USER:$SUDO_USER /home/$SUDO_USER/$i
+
+        # Mount NFS folders
+        mount -o $mount_opts $mount_ip:$mount_path/$i /home/$SUDO_USER/$i
+
+        # Add mounts to fstab
+        # Need to echo comment line and new line
+        echo $mount_ip:$mount_path/$i /home/$SUDO_USER/$i $mount_opts >> /etc/fstab
+      done
+fi
+
+
+########## SMTP Mail ############################
 if [ $email = "y" ] 
   then
     # Install ssmtp
@@ -139,24 +160,38 @@ EOF
     #  ssmtp [email@gmail.com] < testmsg.txt
 fi
 
+########## Sensors ##############################
 
-########## Git ##################################
-if [ $git = y ]
-  then 
-    # Install git-core
-    sudo apt-get -y install git-core
-    
-    # Configure git
-    git config --global user.name "$git_user"
-    git config --global user.email "$git_email"
-    
-    # Create new ssh key for Git, using the provided email as a label
-    ssh-keygen -t rsa -C "Git_sshKey"
-  
-  else
-    # Do nothing
+if [ $sensors = "y"       ]
+  then
+    apt-get install lmsensors
+    echo "Run sensors-detect as root then reboot for changes to take effect"
+
+    # Need to figure out how to automate sensors-detect
 fi
 
+############################################################################################
+
+
+
+
+
+########## Flexget #########################################
+if [ $flexget = "y" ]
+  then
+    # Install python, python-pip and flexget
+    apt-get -y install python2.7
+    apt-get -y install python-pip
+    pip install flexget
+    
+    # Create flexget working area
+    
+fi
+
+
+
+
+# not tested
 
 # VNC desktop install / config
 
@@ -185,7 +220,5 @@ if [ $vnc = y ]
 EOF
     # Configure the startup scripts so VNC does not start at boot
     # Add alias to .bash_aliases for VNC start and stop
-    
-  else
-    # Do nothing
+
 fi
