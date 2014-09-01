@@ -35,27 +35,27 @@ echo 'auto lo'                        >>$ifile
 echo 'iface lo inet loopback'         >>$ifile
 echo ''                               >>$ifile
 
-for i in ${Interfaces[@]}"
+for i in "${Interfaces[@]}"
   do
-    echo 'auto $i'                    >>$ifile
-    echo 'iface $i inet manual'       >>$ifile
+    echo "auto $i"                    >>$ifile
+    echo "iface $i inet manual"       >>$ifile
     echo '  bond-master bond0'        >>$ifile
   done
 
-echo 'auto $BondName'                 >>$ifile
-echo 'iface $BondName inet static'    >>$ifile
-echo '  address $BondIP'              >>$ifile
-echo '  gateway $BondGateway'         >>$ifile
-echo '  netmask $BondNetmask'         >>$ifile
-echo '  dns-nameserver $BondGateway'  >>$ifile
-echo '  bond-mode $BondMode'          >>$ifile
+echo "auto $BondName"                 >>$ifile
+echo "iface $BondName inet static"    >>$ifile
+echo "  address $BondIP"              >>$ifile
+echo "  gateway $BondGateway"         >>$ifile
+echo "  netmask $BondNetmask"         >>$ifile
+echo "  dns-nameserver $BondGateway"  >>$ifile
+echo "  bond-mode $BondMode"          >>$ifile
 echo '  bond-slaves none'             >>$ifile
 echo '  bond-miimon 100'              >>$ifile
 echo '  bond-updelay 200'             >>$ifile
 echo '  bond-downdelay 200'           >>$ifile
 
 # Bring bonded interfaces up
-for i in ${Interfaces[@]}"
+for i in "${Interfaces[@]}"
   do
     ifup $i
   done
