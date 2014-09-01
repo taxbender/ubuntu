@@ -8,8 +8,9 @@
   BondNetmask="255.255.255.0"         # Bond interface netmask
   BondMode="balance-rr"               # Bond mode; balance-rr provides load balancing and fault tolerance
   ifile="/etc/network/interfaces"     # Network interfaces file
+
   
-########## Update Repositories / Upgrade System #
+########## Update Repositories / Upgrade System ##
 apt-get -y --force-yes update
 apt-get -y --force-yes upgrade  
 
@@ -29,7 +30,7 @@ for i in "${Interfaces[@]}"
   sudo mv /etc/network/interfaces /etc/network/interfaces.original
 
 # Create interface file for the bonded interface
-touch /etc/network/interfaces
+touch $ifile
 
 echo 'auto lo'                        >>$ifile
 echo 'iface lo inet loopback'         >>$ifile
