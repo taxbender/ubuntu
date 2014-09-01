@@ -26,8 +26,14 @@ for i in "${Interfaces[@]}"
     sudo ifdown $i
   done
 
+# Add bonding kernal module to boot list
+echo 'bonding'                        >>/etc/modules
+
+# Load the bonding module
+modprobe bonding
+
 # Rename original interfaces file
-  sudo mv /etc/network/interfaces /etc/network/interfaces.original
+sudo mv /etc/network/interfaces /etc/network/interfaces.original
 
 # Create interface file for the bonded interface
 touch $ifile
