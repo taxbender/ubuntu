@@ -54,7 +54,7 @@ apt-get -y --force-yes upgrade
 if [ $net_bond = "y" ]
   then
     # Install bonding enslave program
-    sudo apt-get ifenslave
+    apt-get install -y ifenslave-2.6
     # Shut-down each interface listed in Interfaces array
     for i in "${Interfaces[@]}"
       do
@@ -63,9 +63,12 @@ if [ $net_bond = "y" ]
     # End of loop
 	
     # Copy original interfaces file
-    sudo cp /etc/network/interface /etc/network/interface.original
+    sudo cp /etc/network/interfaces /etc/network/interfaces.original
     # Create interface file for the bonded interface
-    cat > /etc/network/interface << EOF
+    cat > /etc/network/interfaces << EOF
+auto lo
+iface lo inet loopback
+
 auto $BondName
 iface $BondName inet static
   address $BondIP
@@ -81,7 +84,7 @@ EOF
     # Add the slave interfaces to line 7 of the interface file
     for i in "${Interfaces[@]}"
       do
-        $ awk '{print $7"$i "}' /etc/network/interface
+        $ awk '{print $7"$i "}' /etc/network/interfaces
       done
 	
     # Bring bonded interface up
