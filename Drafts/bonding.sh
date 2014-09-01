@@ -41,6 +41,7 @@ for i in "${Interfaces[@]}"
     echo "auto $i"                    >>$ifile
     echo "iface $i inet manual"       >>$ifile
     echo '  bond-master bond0'        >>$ifile
+    echo ''                           >>$ifile
   done
 
 echo "auto $BondName"                 >>$ifile
