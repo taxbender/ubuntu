@@ -24,6 +24,7 @@ apt-get install -y ifenslave-2.6
 for i in "${Interfaces[@]}"
   do
     sudo ifdown $i
+    sleep 2
   done
 
 # Add bonding kernal module to boot list
@@ -66,4 +67,6 @@ echo '  bond-downdelay 200'           >>$ifile
 for i in "${Interfaces[@]}"
   do
     ifup $i
+    # Give system time to load config
+    sleep 2
   done
