@@ -23,8 +23,8 @@
     mount -o $mount_opts $mount_ip:$mount_path/$i /home/$SUDO_USER/$i
 
     # Add mounts to fstab
-    echo ''                                                       >> /etc/fstab
-    echo $mount_ip:$mount_path/$i /home/$SUDO_USER/$i $mount_opts >> /etc/fstab
+    echo ''                                                                 >> /etc/fstab
+    echo $mount_ip:$mount_path/$i /home/$SUDO_USER/$i nfs $mount_opts 0,0   >> /etc/fstab
   
   done
 
