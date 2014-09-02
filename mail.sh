@@ -30,7 +30,7 @@ chown root:mail /etc/ssmtp/ssmtp.conf
 chmod 640 /etc/ssmtp/ssmtp.conf
 
 # Add user to mail group & reload group assignments
-adduser $SUOD_USER mail
+adduser $SUDO_USER mail
 
 # Create a file for the test email
 echo "This is a test email" >> /home/$SUDO_USER/testmsg.txt
