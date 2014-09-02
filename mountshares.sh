@@ -1,12 +1,11 @@
 #!/bin/bash
 
-
 # NFS Mounts
   mount_ip="192.168.10.105"
   mount_path="/mnt/user"
   mounts=( "Ghost_Backup" "Media" )
   mount_opts="soft,intr,rsize=8192,wsize=8192"
-  
+
 # Install nfs client app
   apt-get -y install nfs-common
 
@@ -25,7 +24,5 @@
     # Add mounts to fstab
     echo ''                                                                 >> /etc/fstab
     echo $mount_ip:$mount_path/$i /home/$SUDO_USER/$i nfs $mount_opts 0,0   >> /etc/fstab
-  
+
   done
-
-
