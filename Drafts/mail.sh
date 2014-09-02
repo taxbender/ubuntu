@@ -5,9 +5,6 @@ email_address="email@gmail.com"
 email_password="password"
 mconfig="/etc/ssmtp/ssmtp.conf"
 
-
-########## SMTP Mail ############################
-
 # Install ssmtp
 sudo apt-get install ssmtp
 
@@ -41,7 +38,7 @@ echo "This is a test email" >> /home/$SUDO_USER/testmsg.txt
 # Change ownership to sudo user / group. The second $SUDO_USER is hacky
 #   but works. Assumes sudo_user's primary group is the same as his name
 chown $SUDO_USER:$SUDO_USER /home/$SUDO_USER/testmsg.txt
-  
+
 # User groups are updated on login. Script runs and then forces a 
 #  reboot. Once logged in, user should send a test email to ensure
 #  config work. Syntax for test email is:
