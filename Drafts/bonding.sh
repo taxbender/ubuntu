@@ -9,10 +9,10 @@
   BondMode="balance-rr"               # Bond mode; balance-rr provides load balancing and fault tolerance
   ifile="/etc/network/interfaces"     # Network interfaces file
 
-  
+
 ########## Update Repositories / Upgrade System ##
 apt-get -y --force-yes update
-apt-get -y --force-yes upgrade  
+apt-get -y --force-yes upgrade
 
 
 ########## Network Bonding Config ################
