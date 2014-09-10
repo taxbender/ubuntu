@@ -14,9 +14,6 @@
 apt-get -y --force-yes update
 apt-get -y --force-yes upgrade
 
-
-########## Network Bonding Config ################
-
 # Install bonding enslave program
 apt-get install -y ifenslave-2.6
 
