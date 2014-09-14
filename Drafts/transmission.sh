@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Transmission config file options
+ifile="/etc/debian-transmission/settings.json"                                                         # Transmission settings file
+blocklistURL = "http://list.iblocklist.com/?list=ydxerpxkpcfqjaybcssw&fileformat=p2p&archiveformat=gz" # Blocklist URL
+watchdir = "/home/$SUDO_USER/transmission/watch"                                                       # Watch directory
+completedir = "/home/$SUDO_USER/transmission/complete"                                                 # Complete directory
+incomplete dir = "/home/$SUDO_USER/transmission/incomplete"                                            # Incomplete directory
+subnetwhitelist = "192.168.*.*"                                                                        # Network subnet
 
 # Add transmission repository to get latest version releases
   apt-get install -y python-software-properties software-properties-common
@@ -22,8 +29,6 @@ mkdir /home/$SUDO_USER/transmission/watch
 chown -R $SUDO_USER:debian-transmission /home/$SUDO_USER/transmission
 chmod -R 774 /home/$SUDO_USER/transmission
 
-
-
 # Backup original transmission settings file
 mv /etc/transmission-daemon/settings.json /etc/transmission-daemon/settings.json.org
 
@@ -33,15 +38,6 @@ chgrp -R debian-transmission /etc/transmission-daemon/settings.json
 chmod -R 770 /etc/transmission-daemon/settings.json
 
 # Add settings to the empty setting file
-#   Transmission options
-ifile="/etc/debian-transmission/settings.json"     # Transmission settings file
-blocklistURL = "http://list.iblocklist.com/?list=ydxerpxkpcfqjaybcssw&fileformat=p2p&archiveformat=gz"
-watchdir = "\/home\/$SUDO_USER\/transmission\/watch"
-completedir = "\/home\/$SUDO_USER\/transmission\/complete"
-incomplete dir = "\/home\/$SUDO_USER\/transmission\/incomplete"
-subnetwhitelist = "192.168.*.*""                                                 # Network subnet
-
-
 echo '{'                                                                         >> $ifile
 echo '  "alt-speed-down": 50,'                                                   >> $ifile
 echo '  "alt-speed-enabled": false,'                                             >> $ifile
@@ -115,7 +111,6 @@ echo '  "utp-enabled": true,'                                                   
 echo "  \"watch-dir\": \"$watchdir\","                                           >> $ifile
 echo '  "watch-dir-enabled": true'                                               >> $ifile
 echo '}'                                                                         >> $ifile
-
 
 # Reload transmission daemon with updated config
 service transmission-daemon reload
