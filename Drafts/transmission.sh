@@ -2,11 +2,11 @@
 
 # Transmission config file options
 ifile="/etc/debian-transmission/settings.json"                                                         # Transmission settings file
-blocklistURL = "http://list.iblocklist.com/?list=ydxerpxkpcfqjaybcssw&fileformat=p2p&archiveformat=gz" # Blocklist URL
-watchdir = "/home/$SUDO_USER/transmission/watch"                                                       # Watch directory
-completedir = "/home/$SUDO_USER/transmission/complete"                                                 # Complete directory
-incomplete dir = "/home/$SUDO_USER/transmission/incomplete"                                            # Incomplete directory
-subnetwhitelist = "192.168.*.*"                                                                        # Network subnet
+blocklistURL="http://list.iblocklist.com/?list=ydxerpxkpcfqjaybcssw&fileformat=p2p&archiveformat=gz"   # Blocklist URL
+watchdir="/home/$SUDO_USER/transmission/watch"                                                         # Watch directory
+completedir="/home/$SUDO_USER/transmission/complete"                                                   # Complete directory
+incomplete dir="/home/$SUDO_USER/transmission/incomplete"                                              # Incomplete directory
+subnetwhitelist="192.168.*.*"                                                                          # Network subnet
 
 # Add transmission repository to get latest version releases
   apt-get install -y python-software-properties software-properties-common
