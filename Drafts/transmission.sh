@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Transmission config file options
-ifile="/etc/debian-transmission/settings.json"                                                         # Transmission settings file
+ifile="/etc/transmission-daemon/settings.json"                                                         # Transmission settings file
 blocklistURL="http://list.iblocklist.com/?list=ydxerpxkpcfqjaybcssw&fileformat=p2p&archiveformat=gz"   # Blocklist URL
 watchdir="/home/$SUDO_USER/transmission/watch"                                                         # Watch directory
 completedir="/home/$SUDO_USER/transmission/complete"                                                   # Complete directory
