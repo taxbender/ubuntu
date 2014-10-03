@@ -1,3 +1,6 @@
+#!/bin/bash
+
+
 # Docker install script
 #
 # Copied from https://get.docker.io/ubuntu/
@@ -21,3 +24,7 @@ apt-get install -y lxc-docker
 #
 # Alternatively, use the curl-able script provided at https://get.docker.io
 #
+
+# After install, running the command below should initiate download of the Ubuntu base image.
+
+# sudo docker run -i -t ubuntu /bin/bash
