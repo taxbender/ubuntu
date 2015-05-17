@@ -5,8 +5,7 @@
 
 flexuser="debian-transmission"
 
-# Install python, python-pip and flexget
-  apt-get -y install python2.7
+# Install python-pip and flexget
   apt-get -y install python-pip
   pip install flexget
 
@@ -14,7 +13,7 @@ flexuser="debian-transmission"
   pip install transmissionrpc
   
 # Create FlexGet working area
-  sudo -u $flexuser -g $flexuser mkdir /etc/transmission-daemon/.flexget
+  sudo -u $flexuser -g $flexuser mkdir /home/$SUDO_USER/.flexget
   
 # Create empty FlexGet config file
-  sudo -u $flexuser -g $flexuser touch /etc/transmission-daemon/.flexget/config.yml
+  sudo -u $flexuser -g $flexuser touch /home/$SUDO_USER/.flexget/config.yml
